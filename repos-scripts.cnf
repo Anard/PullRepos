@@ -9,17 +9,20 @@ build-repo() {
 				mkdir cmake_build
 			fi
 			cd cmake_build
-			ret=`cmake ..`
+			cmake ..
+			ret=$?
 			if [ $ret -gt 0 ]; then return $ret
 			fi
 			make -j9
+			ret=$?
 			if [ $ret -gt 0 ]; then return $ret
 			fi
 			;;
 			
 		"clover")
 			cd CloverPackage
-			ret=`./makepkg`
+			ret=./makepkg
+			ret=$?
 			if [ $ret -gt 0 ]; then return $ret
 			fi
 			;;

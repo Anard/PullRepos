@@ -148,7 +148,8 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 		if [[ "${binaries[$i]}" != "" ]]; then
 			# Build with fonction defined in ${configPath}gits-scripts.cnf
 			echo "Compilation suivant le script configuré"
-			ret=`build-repo ${repos[$i]}`
+			build-repo ${repos[$i]}
+			ret=$?
 			cd
 			cd "${paths[$i]}"
 			# Get binary files
