@@ -1,0 +1,32 @@
+#!/bin/bash
+# Configuration de la fonction git-pull (à placer dans /usr/local/lib/)
+# Scripts additionnels (
+
+build-repo() {
+	case "$1" in
+		"stk")
+			if ! [ -d cmake_build ]; then
+				mkdir cmake_build
+			fi
+			cd cmake_build
+			ret=`cmake ..`
+			if [ $ret -gt 0 ]; then return $ret
+			fi
+			make -j9
+			if [ $ret -gt 0 ]; then return $ret
+			fi
+			;;
+			
+		"clover")
+			cd CloverPackage
+			ret=`./makepkg`
+			if [ $ret -gt 0 ]; then return $ret
+			fi
+			;;
+			
+		*)
+			;;
+	esac
+	
+	return 0
+}

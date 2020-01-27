@@ -1,0 +1,260 @@
+#!/bin/bash
+# script de mise à jour d'un dépôt git
+configPath="/usr/local/lib"
+source ${configPath}/help.cnf
+
+initDir=`pwd`
+if [ "$#" -eq 0 ]; then
+	help=1
+else help=0
+fi
+
+while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
+	# Parameters
+	if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+		help=1
+	fi
+	
+	if [ "$help" -gt 0 ]; then
+		# HELP
+		echo "${bold}Script de mise à jour d'un dépôt git ou svn${normal}"
+		echo "Utilisation : repos-pull DIRECTORY|CONFIG [DIRECTORY] [...]"
+		echo
+		echo "${bold}DIRECTORY :${normal} Git's root directory to update"
+		echo "${bold}CONFIG    :${normal} Configuration loaded from ${configPath}/gits.cnf"
+		echo
+		
+		cd "$initDir"
+		exit 0
+	fi
+
+	request="$1"
+	repos=()
+	paths=()
+	type=()
+	
+	# Search in config file
+	if ! [ -d "$request" ]; then
+		reading=0
+	
+		source ${configPath}/gits-scripts.cnf
+		while read -r line; do
+			line="${line## }"
+			line="${line%% }"
+			if [[ "$line" =~ ^# ]]; then
+				continue
+			fi
+			
+			if [[ ${line:0:1} == '}' ]]; then
+				if [ $reading -gt 0 ]; then
+					break
+				fi
+				line=${line:1}
+			
+			elif [[ "$line" =~ '{' ]]; then
+				dep=`echo "$line" | cut -d'{' -f1`
+				dep="${dep% }"
+				
+				if [[ "$dep" == "$request" ]]; then
+					reading=1
+				fi
+			
+			elif [ $reading -gt 0 ]; then
+				# read line
+				if [[ "$line" =~ ^repos: ]]; then
+					line="${line#repos:}"
+					line="${line## }"
+					line="${line%% }"
+					repos=($line)
+				elif [[ "$line" =~ ^type: ]]; then
+					line="${line#type:}"
+					line="${line## }"
+					line="${line%% }"
+					type=($line)
+				elif [[ "$line" =~ ^paths: ]]; then
+					line="${line#paths:}"
+					line="${line## }"
+					line="${line%% }"
+					paths=($line)
+				elif [[ "$line" =~ ^binaries: ]]; then
+					line="${line#binaries:}"
+					line="${line## }"
+					line="${line%% }"
+					binaries=($line)
+				fi
+			fi
+		done < ${configPath}/gits.cnf
+	fi
+	
+	if [ ${#paths[*]} -eq 0 ]; then
+		binaries[0]=""
+		paths[0]=${request%/}
+		repos[0]=${paths[0]##*/}
+		type[0]="git"
+	fi
+	
+	# Update
+	for i in ${!repos[@]}; do
+	
+		cd
+		echo "Mise à jour de ${repos[$i]} : ${paths[$i]} (${type[$i]})..."
+	
+		if ! [ -d ${paths[$i]} ]; then
+			echo "Répertoire introuvable"
+			echo "Tapez -h pour afficher l'aide"
+			continue
+		fi
+	
+		cd "${paths[$i]}"		
+		case "${type[$i]}" in
+		# GIT :
+		"git")
+			
+			upToDate=`git pull`
+			if [ $? -gt 0 ]; then
+				echo "Erreur lors de la mise à jour du dépôt depuis le serveur"
+				continue
+			else
+				if [[ "$upToDate" =~ Already\ up\ to\ date ]]; then
+					echo "Le dépôt est déjà à jour"
+					continue
+				fi
+			fi
+			;;
+						
+		# SVN :
+		"svn")	
+			upToDate=`svn up`
+			if [ $? -gt 0 ]; then
+				echo "Erreur lors de la mise à jour du dépôt depuis le serveur"
+				continue
+			else
+				if ! [[ "$upToDate" =~ Download ]]; then
+					echo "Le dépôt est déjà à jour"
+					continue
+				fi
+			fi
+			;;		
+		
+		# Unknown :
+		*)
+			echo "Type de dépôt inconnu, revoyez la configuration de ${configPath}/gits.cnf"
+			cd "$initDir"
+			exit 1
+		esac
+		
+		echo 
+		# Build repository
+		if [[ "${binaries[$i]}" != "" ]]; then
+			# Build with fonction defined in ${configPath}gits-scripts.cnf
+			echo "Compilation suivant le script configuré"
+			ret=`build-repo ${repos[$i]}`
+			cd
+			cd "${paths[$i]}"
+			# Get binary files
+			if [ $ret -eq 0 ]; then
+				files=( `find ${binaries[$i]} -maxdepth 1 -type f` )
+			else continue
+			fi
+		else continue
+		fi
+		
+		# Copy files
+		if [ ${#files[@]} -gt 1 ]; then
+			declare -a selectedFiles
+			noResps="^[nN]([oO][nN]?)?$"
+			yesResps="^[yY]([eE][sS])?$"
+			ouiResps="^[oO]([uU][iI])?$"
+			echo "Quel(s) executable(s) voulez-vous copier ? (laissez vide pour terminer la sélection)"
+			select file in ALL ${files[@]} STOP; do
+						
+				if ! [[ "$REPLY" =~ ^[[:digit:]]+$ ]]; then
+					if [[ "$REPLY" == "ALL" ]]; then
+						REPLY=1
+					elif [[ "$REPLY" == "STOP" ]]; then
+						file="STOP"
+						let REPLY=${#files[@]}+2
+					elif [[ "${files[@]}" =~ $REPLY ]]; then
+						file="$REPLY"
+						REPLY=2
+					else
+						file=""
+						REPLY=0
+					fi
+				fi
+
+				if [ "$REPLY" -eq 1 ]; then
+					selectedFiles=${files[@]}
+					echo "Tous les fichiers ont été sélectionnés"
+					break
+				
+				elif [[ "$file" == "STOP" ]]; then
+					break
+				
+				elif [ "$REPLY" -gt 1 ] && [[ "$file" != "" ]]; then
+					if ! [[ "${selectedFiles[@]}" =~ $file ]]; then
+						selectedFiles+=( "$file" )
+					fi
+					echo "Fichiers sélectionnés : ${selectedFiles[@]}"
+					
+				else
+					init=""
+					echo "Réponse invalide, veuillez faire un choix parmi les fichiers proposés"
+					while [[ "$init" == "" ]] && [ ${#selectedFiles[@]} -gt 0 ]; do
+						read -p "Voulez-vous réinitialiser votre sélection : (y/N)"	init
+						if [[ "$init" == "" ]] || [[ "$init" =~ ${noResps} ]]; then
+							init="N"
+						elif [[ "$init" =~ ${yesResps} ]] || [[ "$init" =~ ${ouiResps} ]]; then
+							selectedFiles=()
+						else 
+							echo "Réponse invalide, les préonses possibles sont : y(es) | o(ui) / N(o) | N(on)"
+							init=""
+						fi
+					done
+				fi	
+			done
+		
+		else selectedFiles=( $files )
+		fi
+				
+		if [ "${#selectedFiles[@]}" -gt 0 ]; then
+			case "$OSTYPE" in
+				"linux-gnu")
+					defDest="/usr/bin/"
+					;;
+				"darwin"*)
+					defDest="/Applications/"
+					;;
+				*)
+					echo "OS inconnu"
+					defDest="/"
+					;;
+			esac
+		
+			cd "$initDir"
+			#baseDir="${paths[$i]%/}/${binaries[$i]}"
+			read -ep "Où voulez-vous copier l(es) exécutable(s) ? (${defDest} par défaut, \"//\" pour annuler la copie) " dest
+			if [[ "$dest" == "" ]]; then
+				dest=$defDest
+			fi
+			
+			if [[ "$dest" != "//" ]]; then
+				if [ -w ${dest%/*} ]; then
+					for file in ${selectedFiles[@]}; do
+						cp -r "${paths[$i]}/${file}" "$dest"
+					done
+				else
+					for file in ${selectedFiles[@]}; do
+						sudo cp -r "${paths[$i]}/${file}" "$dest"
+					done
+				fi
+			else echo "Copie annulée"
+			fi
+		fi
+	done
+	
+	shift
+done
+
+cd "$initDir"
+exit 0

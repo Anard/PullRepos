@@ -1,0 +1,24 @@
+# Configuration de la fonction git-pull (à placer dans /usr/local/lib/)
+# Description de chaque dépôt :
+
+# nom utilise lors de l'appel à git-pull {
+#	repos:		nom des dépôts
+#	type:		git|svn
+#	paths:		chemins relatifs vers les dossiers depuis ~/
+#	binaries:	chemin ou expression vers les executables depuis la racine du dépôt ou expression ([FOLDER]/*.sh p/ ex.)
+# }
+
+
+stk {
+ 	repos:		Assets Code Medias
+	type:		svn git svn
+	paths:		Applications/Git/stk-assets Applications/Git/stk-code Applications/Git/stk_media_repo
+	binaries:	"" cmake_build/bin ""
+}
+
+clover {
+	repos:		Bootloader
+	type:		git
+	paths:		/Volumes/Medias/Installeurs/INSTALL_macOS/CloverBootloader
+	binaries:	CloverPackage/sym
+}
