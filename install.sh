@@ -2,4 +2,4 @@
 echo Installation du script
 sudo cp *.cnf /usr/local/lib
 sudo cp repos-pull /usr/local/bin
-sudo chmmod +x /usr/local/bin/repos-pull
+sudo chmod +x /usr/local/bin/repos-pull
