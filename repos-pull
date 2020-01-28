@@ -21,7 +21,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 		echo "Utilisation : repos-pull DIRECTORY|CONFIG [DIRECTORY] [...]"
 		echo
 		echo "${bold}DIRECTORY :${normal} Git's root directory to update"
-		echo "${bold}CONFIG    :${normal} Configuration loaded from ${configPath}/gits.cnf"
+		echo "${bold}CONFIG    :${normal} Configuration loaded from ${configPath}/repos.cnf"
 		echo
 		
 		cd "$initDir"
@@ -38,7 +38,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 	if ! [ -d "$request" ]; then
 		reading=0
 	
-		source ${configPath}/gits-scripts.cnf
+		source ${configPath}/repos-scripts.cnf
 		while read -r line; do
 			line="${line## }"
 			line="${line%% }"
@@ -84,7 +84,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 					binaries=($line)
 				fi
 			fi
-		done < ${configPath}/gits.cnf
+		done < ${configPath}/repos.cnf
 	fi
 	
 	if [ ${#paths[*]} -eq 0 ]; then
@@ -139,7 +139,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 		
 		# Unknown :
 		*)
-			echo "Type de dépôt inconnu, revoyez la configuration de ${configPath}/gits.cnf"
+			echo "Type de dépôt inconnu, revoyez la configuration de ${configPath}/repos.cnf"
 			cd "$initDir"
 			exit 1
 		esac
@@ -147,7 +147,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 		echo 
 		# Build repository
 		if [[ "${binaries[$i]}" != "" ]]; then
-			# Build with fonction defined in ${configPath}gits-scripts.cnf
+			# Build with fonction defined in ${configPath}repos-scripts.cnf
 			echo "Compilation suivant le script configuré"
 			build-repo ${request}
 			ret=$?
