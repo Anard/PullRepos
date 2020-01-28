@@ -43,5 +43,6 @@ sudo cp repos-pull ${scriptPath}/
 sudo chmod +x ${scriptPath}/repos-pull
 echo "Installation terminée"
 echo "Configurez ${configPath}/repos.cnf et ${configPath}/repos-scripts.cnf pour vos dépôts"
+echo "Utilisez repos-pull -h pour plus d'informations"
 
 exit 0
