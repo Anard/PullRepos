@@ -1,5 +1,5 @@
 #!/bin/sh
-configgPath="/usr/local/lib"
+configPath="/usr/local/lib"
 scriptPath="/usr/local/bin"
 
 echo "Récupération et installation du dépôt HelpSh"
