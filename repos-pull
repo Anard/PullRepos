@@ -20,7 +20,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 		echo "${bold}Script de mise à jour d'un dépôt git ou svn${normal}"
 		echo "Utilisation : repos-pull DIRECTORY|CONFIG [DIRECTORY] [...]"
 		echo
-		echo "${bold}DIRECTORY :${normal} Git's root directory to update"
+		echo "${bold}DIRECTORY :${normal} Git's root directory to update from home directory"
 		echo "${bold}CONFIG    :${normal} Configuration loaded from ${configPath}/repos.cnf"
 		echo
 		
