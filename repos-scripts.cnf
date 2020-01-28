@@ -4,30 +4,32 @@
 
 build-repo() {
 	case "$1" in
-		"stk")
+		# "nom+repos")
+		#	...code à éxecuter...
+		#	;;
+	
+		"stkCode")
 			if ! [ -d cmake_build ]; then
 				mkdir cmake_build
 			fi
 			cd cmake_build
 			cmake ..
 			ret=$?
-			if [ $ret -gt 0 ]; then return $ret
-			fi
+			if [ $ret -gt 0 ]; then return $ret; fi
 			make -j9
 			ret=$?
-			if [ $ret -gt 0 ]; then return $ret
-			fi
+			if [ $ret -gt 0 ]; then return $ret; fi
 			;;
 			
-		"clover")
+		"cloverBootloader")
 			cd CloverPackage
-			ret=./makepkg
+			./makepkg
 			ret=$?
-			if [ $ret -gt 0 ]; then return $ret
-			fi
+			if [ $ret -gt 0 ]; then return $ret; fi
 			;;
 			
 		*)
+			return 1
 			;;
 	esac
 	

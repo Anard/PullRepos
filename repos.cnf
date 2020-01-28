@@ -5,7 +5,7 @@
 #	repos:		nom des dépôts
 #	type:		git|svn
 #	paths:		chemins relatifs vers les dossiers depuis ~/
-#	binaries:	chemin ou expression vers les executables depuis la racine du dépôt ou expression ([FOLDER]/*.sh p/ ex.)
+#	binaries:	chemin ou expression vers les executables depuis la racine du dépôt ou expression ([FOLDER]/*.sh p/ ex.), le script de build ne sera exécuté que si un executable est déterminé
 # }
 
 
