@@ -1,6 +1,6 @@
 #!/bin/bash
-# Configuration de la fonction git-pull (à placer dans /usr/local/lib/)
-# Scripts additionnels (
+# Configuration de la fonction repos-pull (à placer dans /usr/local/lib/)
+# Scripts additionnels : le nom du paramètre dooit correspondre au nom pour l'appel à repos-pull suivi du nom du dépôt (définis dans repos.cnf) sans espace ou caractère supplémentaire
 
 build-repo() {
 	case "$1" in
