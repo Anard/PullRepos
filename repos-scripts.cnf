@@ -29,6 +29,7 @@ build-repo() {
 			;;
 			
 		*)
+			echo "Script inconnu"
 			return 1
 			;;
 	esac

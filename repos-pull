@@ -149,7 +149,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 		if [[ "${binaries[$i]}" != "" ]]; then
 			# Build with fonction defined in ${configPath}repos-scripts.cnf
 			echo "Compilation suivant le script configuré"
-			build-repo ${request}
+			build-repo ${request}${repos[$i]}
 			ret=$?
 			cd
 			cd "${paths[$i]}"
