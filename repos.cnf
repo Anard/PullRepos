@@ -5,7 +5,7 @@
 #	repos:		nom des dépôts
 #	type:		git|svn
 #	paths:		chemins relatifs vers les dossiers depuis ~/
-#	binaries:	chemin ou expression vers les executables depuis la racine du dépôt ([FOLDER]/*.sh p/ ex.), le script de build ne sera exécuté que si un executable est déterminé
+#	binaries:	expression vers les executables depuis la racine du dépôt ([FOLDER]/* ou [FOLDER]/*.sh p/ ex.), le script de build ne sera exécuté que si un chemin vers l'executable a été déterminé
 # }
 
 
@@ -13,12 +13,12 @@ stk {
  	repos:		Assets Code Medias
 	type:		svn git svn
 	paths:		Applications/Git/stk-assets Applications/Git/stk-code Applications/Git/stk_media_repo
-	binaries:	"" cmake_build/bin ""
+	binaries:	"" cmake_build/bin/* ""
 }
 
 clover {
 	repos:		Bootloader
 	type:		git
 	paths:		/Volumes/Medias/Installeurs/INSTALL_macOS/CloverBootloader
-	binaries:	CloverPackage/sym
+	binaries:	CloverPackage/sym/*
 }

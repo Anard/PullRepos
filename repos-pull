@@ -156,7 +156,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 			# Get binary files
 			if [ $ret -eq 0 ]; then
 				#files=( `find ${binaries[$i]} -maxdepth 1 -type f` )
-				files=( `ls ${binaries[$i]}` )
+				files=( `find ${binaries[$i]} -depth 0` )
 			else
 				echo "Erreur de compilation"
 				continue
