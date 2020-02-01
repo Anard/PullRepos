@@ -8,6 +8,7 @@
 #	binaries:	relative expression pointing to binairies from repository's root ([FOLDER]/* or [FOLDER]/*.sh for example), build script will be executed only if a binary is configured here
 # }
 
+# Examples :
 
 stk {
  	repos:		Assets Code Medias
