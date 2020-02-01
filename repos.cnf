@@ -1,11 +1,11 @@
-# Configuration de la fonction repos-pull (à placer dans /usr/local/lib/)
-# Description de chaque dépôt :
+# Configure repos-pull function (place file in /usr/local/lib/)
+# Describe all repositories :
 
-# nom utilise lors de l'appel à repos-pull {
-#	repos:		nom des dépôts
-#	type:		git|svn
-#	paths:		chemins relatifs vers les dossiers depuis ~/
-#	binaries:	expression vers les executables depuis la racine du dépôt ([FOLDER]/* ou [FOLDER]/*.sh p/ ex.), le script de build ne sera exécuté que si un chemin vers l'executable a été déterminé
+# name used when calling repos-pull {
+#	repos:		space separated names of repositories
+#	type:		git|svn (space separated)
+#	paths:		relative paths to repository folder from ~/
+#	binaries:	relative expression pointing to binairies from repository's root ([FOLDER]/* or [FOLDER]/*.sh for example), build script will be executed only if a binary is configured here
 # }
 
 
