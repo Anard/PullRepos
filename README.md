@@ -1,5 +1,5 @@
 # PullRepos
-Automatically update and build GIT and/or SVN repositories
+## Automatically update and build multiple GIT and/or SVN repositories
 
 Script needs https://github.com/Anard/HelpSh to work correctly (automatically installed by install.sh script)
 
