@@ -1,12 +1,18 @@
 #!/bin/bash
-# Configuration de la fonction repos-pull (à placer dans /usr/local/lib/)
-# Scripts additionnels : le nom du paramètre dooit correspondre au nom pour l'appel à repos-pull suivi du nom du dépôt (définis dans repos.cnf) sans espace ou caractère supplémentaire
+# Configure fonction repos-pull function (place file in /usr/local/lib/)
+# Additionnal scripts :
+#	- add your scripts before "*)",
+#	- parameter's name have to be the name used when calling repos-pull function followed by repository's name (names defined in repos.cnf) without space or other character
+#	- finish your scripts by ";;"
+#	- configured script will be executed from repository's root
 
 build-repo() {
 	case "$1" in
-		# "nom+repos")
-		#	...code à éxecuter...
+		# "callingName+reposName")
+		#	...code to run...
 		#	;;
+		
+		# Examples
 	
 		"stkCode")
 			if ! [ -d cmake_build ]; then
