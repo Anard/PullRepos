@@ -5,6 +5,7 @@
 #	- parameter's name have to be the name used when calling repos-pull function followed by repository's name (names defined in repos.cnf) without space or other character
 #	- finish your scripts by ";;"
 #	- configured script will be executed from repository's root
+#	- return a value greater than 0 if an error occurs
 
 build-repo() {
 	case "$1" in
