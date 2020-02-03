@@ -155,13 +155,7 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 			cd "${paths[$i]}"
 			# Get binary files
 			if [ $ret -eq 0 ]; then
-				#files=( `find ${binaries[$i]} -maxdepth 1 -type f` )
 				files=( `find ${binaries[$i]} -depth 0` )
-				for i in ${!files[@]}; do
-					if ! [[ ${files[$i]} =~ ^[\/~] ]]; then
-						files[$i]="~/${files[$i]}"
-					fi
-				done
 			else
 				echo "Erreur de compilation"
 				continue
@@ -249,6 +243,9 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 			fi
 			
 			if [[ "$dest" != "//" ]]; then
+				if ! [[ ${paths[$i]} =~ ^[\/~] ]]; then
+					${paths[$i]}="~/${paths[$i]}"
+				fi
 				if [ -w ${dest%/*} ]; then
 					for file in ${selectedFiles[@]}; do
 						cp -r "${paths[$i]}/${file}" "$dest"
