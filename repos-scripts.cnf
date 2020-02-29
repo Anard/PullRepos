@@ -35,6 +35,10 @@ build-repo() {
 			if [ $ret -gt 0 ]; then return $ret; fi
 			;;
 			
+		"gitSubRepo")
+			sudo make install
+			;;
+
 		*)
 			echo "Unknown building script"
 			return 1

@@ -23,3 +23,16 @@ clover {
 	paths:		/Volumes/Medias/Installeurs/INSTALL_macOS/CloverBootloader
 	binaries:	CloverPackage/sym/*
 }
+
+musee {
+	repos:		Test Main
+	type:		git git
+	paths:		Sites/Musée/htdocs Sites/Musée/www
+}
+
+git {
+	repos:		SubRepo
+	type:		git
+	paths:		Applications/Git/git-subrepo
+	binaries:	.rc
+}
