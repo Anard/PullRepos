@@ -30,7 +30,7 @@ ${Green}CONFIG${normal} :		Configuration loaded from ${configPath}/repos.cnf
 
 HELP
 )
-		echo -e $help
+		echo -e "$help"
 		
 		cd "$initDir"
 		exit 0
