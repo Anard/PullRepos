@@ -18,7 +18,7 @@ if [ $ret -gt 0 ]; then
 	echo "Une erreur est survenue lors du clonage de HelpSh"
 	exit $ret
 fi
-sudo cp HelpSh/*.cnf ${configPath}/
+sudo cp HelpSh/*.cnf /usr/lib/
 ret=$?
 if [ $ret -gt 0 ]; then
 	echo "Une erreur est survenue lors de la copie des fichiers de configuration"
