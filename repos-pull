@@ -1,7 +1,11 @@
 #!/bin/bash
 # script de mise à jour d'un dépôt git
 configPath="/usr/local/lib"
-source /usr/lib/shell-text.cnf
+if [ -f "/usr/lib/shell-text.cnf" ]; then
+	source /usr/lib/shell-text.cnf
+elif [ -f "/usr/local/lib/shell-text.cnf" ]; then
+	source /usr/local/lib/shell-text.cnf
+fi
 
 initDir=`pwd`
 if [ "$#" -eq 0 ]; then
@@ -17,12 +21,16 @@ while [ "$#" -gt 0 ] || [ "$help" -gt 0 ]; do
 	
 	if [ "$help" -gt 0 ]; then
 		# HELP
-		echo "${bold}Script de mise à jour d'un dépôt git ou svn${normal}"
-		echo "Utilisation : repos-pull DIRECTORY|CONFIG [DIRECTORY] [...]"
-		echo
-		echo "${bold}DIRECTORY :${normal} Git's root directory to update from home directory"
-		echo "${bold}CONFIG    :${normal} Configuration loaded from ${configPath}/repos.cnf"
-		echo
+		help=$( cat << HELP
+${bold}Script de mise à jour d'un dépôt git ou svn${normal}
+Usage : ${Blue}repos-pull${normal} ${Green}DIRECTORY${normal}|${Green}CONFIG${normal} [${Green}DIRECTORY${normal}] [...]
+
+${Green}DIRECTORY${normal} :	Git's root directory to update from home directory
+${Green}CONFIG${normal} :		Configuration loaded from ${configPath}/repos.cnf
+
+HELP
+)
+		echo -e $help
 		
 		cd "$initDir"
 		exit 0
